@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     flash[:success] = "User deleted."
     redirect_to users_url
   #  else
- #   end
+    end
   end
     
   private
@@ -71,7 +71,9 @@ class UsersController < ApplicationController
     end
     
     def admin_user
-      redirect_to(root_url) unless current_user.admin?
+      @user = User.find(params[:id])
+      if !current_user.admin? || current_user?(@user)
+      redirect_to(root_url)
     end
     
     def not_signed_in
