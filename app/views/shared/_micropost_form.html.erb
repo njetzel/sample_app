@@ -1,7 +1,14 @@
 <%= form_for(@micropost) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
-    <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+    <%= f.text_area :content, placeholder: "Compose new micropost...", onkeyup: "showCharNumber(this)" %>
   </div>
+  <script>
+  function showCharNumber(txt) {
+	  var length = txt.value.length
+	  $('#charsLeft').text(140-length)
+  }
+  </script>
+  <div id="charsLeft"></div>
   <%= f.submit "Post", class: "btn btn-large btn-primary" %>
 <% end %>
