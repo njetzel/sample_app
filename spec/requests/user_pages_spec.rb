@@ -85,6 +85,17 @@ describe "User pages" do
       end
     end
     
+    describe "follower/following counts" do
+            let(:other_user) { FactoryGirl.create(:user) }
+            before do
+              other_user.follow!(user)
+              visit user_path(user)
+            end
+
+            it { should have_link("0 following", href: following_user_path(user)) }
+            it { should have_link("1 followers", href: followers_user_path(user)) }
+          end
+          
     describe "follow/unfollow buttons" do
       let(:other_user) { FactoryGirl.create(:user) }
       before { sign_in user }
@@ -103,7 +114,7 @@ describe "User pages" do
             click_button "Follow"
           end.to change(other_user.followers, :count).by(1)
         end
-
+        
         describe "toggling the button" do
           before { click_button "Follow" }
           it { should have_xpath("//input[@value='Unfollow']") }
@@ -127,7 +138,7 @@ describe "User pages" do
             click_button "Unfollow"
           end.to change(other_user.followers, :count).by(-1)
         end
-
+        
         describe "toggling the button" do
           before { click_button "Unfollow" }
           it { should have_xpath("//input[@value='Follow']") }

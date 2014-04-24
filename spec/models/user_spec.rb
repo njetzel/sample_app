@@ -155,6 +155,7 @@ describe User do
                 expect(Micropost.where(id: micropost.id)).to be_empty
               end
             end
+      
             describe "status" do
                   let(:unfollowed_post) do
                     FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
@@ -197,5 +198,14 @@ describe User do
                 it { should_not be_following(other_user) }
                 its(:followed_users) { should_not include(other_user) }
               end
-        end
+              
+          it "should destroy associated relationships" do
+            relationships=@user.relationships
+            expect(relationships).not_to be_empty
+            @user.destroy
+            relationships.each do |relationship|
+              expect(Relationship.where(id: relationship.id)).to be_empty
+            end
+          end
+    end
 end
